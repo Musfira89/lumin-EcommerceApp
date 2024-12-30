@@ -1,5 +1,5 @@
 import React from 'react';
-import glassImage from '../assets/skin1.png'; 
+import glassImage from '../../assets/Skin/skin1.png'; 
 
 const HeroSection = () => {
   return (
