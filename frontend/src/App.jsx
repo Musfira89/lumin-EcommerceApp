@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Home } from "./Components/Home";
 import Login from "./Auth/Login";
 import Signup from "./Auth/Signup";
-import DetailPage from "./pages/DetailPage";
+import DetailPage from "./pages/Detailpage";
 import AdminForm from "./Admin/Admin";
 
 function App() {
@@ -17,7 +17,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/:category/:productId" element={<DetailPage />} />
+          <Route path="/:category/product/:id" element={<DetailPage />} />
+
           <Route path="/admin" element={<AdminForm />} />
         </Routes>
       </Router>

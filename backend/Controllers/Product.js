@@ -27,29 +27,25 @@ export const getProductsByCategory = async (req, res) => {
 };
 
 
-// // Fetch single product by ID
-// export const getProductById = async (req, res) => {
-//   const { id } = req.params;
+export const getProductDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query("SELECT * FROM products WHERE id = $1", [id]);
 
-//   try {
-//     const result = await pool.query(
-//       "SELECT * FROM products WHERE id = $1",
-//       [id]
-//     );
+    if (result.rows.length > 0) {
+      const product = result.rows[0];
 
-//     if (result.rows.length === 0) {
-//       return res.status(404).json({ message: "Product not found." });
-//     }
+      // Convert the image (if it exists) to base64
+      if (product.image) {
+        product.image = product.image.toString("base64");
+      }
 
-//     // Convert image to Base64 for the single row
-//     const product = result.rows[0];
-//     if (product.image) {
-//       product.image = product.image.toString("base64");
-//     }
-
-//     res.status(200).json(product);
-//   } catch (error) {
-//     console.error("Error fetching product:", error);
-//     res.status(500).json({ message: "Error fetching product." });
-//   }
-// };
+      res.json(product); // Send the single product
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

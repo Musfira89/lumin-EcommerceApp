@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 const ProductSection = () => {
   const [category, setCategory] = useState("skin");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleShopNow = (product) => {
+    navigate(`/${category}/product/${product.id}`); // Include category in the route
+  };
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -29,8 +36,8 @@ const ProductSection = () => {
           <button
             key={cat}
             className={`px-12 py-2 text-white font-semibold rounded-lg transition-all ${category === cat
-                ? "bg-black shadow-lg transform scale-105"
-                : "bg-gray-400 hover:bg-gray-500 hover:shadow-md"
+              ? "bg-black shadow-lg transform scale-105"
+              : "bg-gray-400 hover:bg-gray-500 hover:shadow-md"
               }`}
             onClick={() => setCategory(cat)}
           >
@@ -85,7 +92,11 @@ const ProductSection = () => {
                 </span>
               </div>
 
-              <button className="mt-4 px-5 py-2 w-full bg-black text-white rounded-md transition-all hover:bg-gray-500">
+              {/* Shop Now Button */}
+              <button
+                onClick={() => handleShopNow(product)}
+                className="mt-4 px-5 py-2 w-full bg-black text-white rounded-md transition-all hover:bg-gray-500"
+              >
                 Shop Now
               </button>
             </div>
