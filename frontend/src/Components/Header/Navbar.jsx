@@ -1,23 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import blackLogo from '../assets/logo.png'; 
+import whiteLogo from '../assets/logo1.png'; 
 
 const Header = () => {
+  const [isDarkBackground, setIsDarkBackground] = useState(true); 
+  
+  useEffect(() => {
+    
+    setIsDarkBackground(true); 
+  }, []);
+
   return (
     <header className="bg-black text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">rhode</h1>
-
+        
         <nav>
-          <ul className="flex space-x-6">
-            <li><a href="#">Shop</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Futures</a></li>
+          <ul className="flex flex-col space-y-2">
+            <li><a href="#" className="hover:underline">Shop</a></li>
+            <li><a href="#" className="hover:underline">About</a></li>
+            <li><a href="#" className="hover:underline">Futures</a></li>
           </ul>
         </nav>
 
+        
+        <img
+          src={isDarkBackground ? whiteLogo : blackLogo}
+          alt="LUMIN.CO"
+          className="h-8"
+        />
+
+        
         <div className="flex space-x-4">
-          <button>Search</button>
-          <button>Account</button>
-          <button>Cart (2)</button>
+          <button className="hover:underline">Search</button>
+          <button className="hover:underline">Account</button>
+          <button className="hover:underline">Cart (2)</button>
         </div>
       </div>
     </header>

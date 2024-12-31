@@ -1,12 +1,12 @@
 import React from 'react';
-import glassImage from '../../assets/Skin/skin1.png'; 
+import uploadedImage from '../assets/freepik__expand__65778.png'; 
 
 const HeroSection = () => {
   return (
     <div className="relative h-screen bg-black text-white flex items-center justify-center">
       <img
-        src={glassImage}
-        alt="Glass with Glazing Milk"
+        src={uploadedImage}
+        alt="Spa and skincare setup"
         className="object-cover w-full h-full opacity-50"
       />
       <div className="absolute text-center">
