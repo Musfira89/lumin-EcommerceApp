@@ -1,5 +1,5 @@
 import React from 'react';
-import uploadedImage from '../assets/freepik__expand__65778.png'; 
+import uploadedImage from '../../assets/Skin/header.png'; 
 
 const HeroSection = () => {
   return (

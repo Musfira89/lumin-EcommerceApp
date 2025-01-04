@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import blackLogo from '../assets/logo.png'; 
-import whiteLogo from '../assets/logo1.png'; 
+import blackLogo from '../../../public/logo.png'; 
+import whiteLogo from '../../../public/logo1.png'; 
 
 const Header = () => {
   const [isDarkBackground, setIsDarkBackground] = useState(true); 
