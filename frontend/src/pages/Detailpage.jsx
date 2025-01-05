@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import { Button, Typography, Box, Divider, IconButton } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import RelatedProduct from "./Relatedproduct";
 const DetailPage = () => {
-  const { category, id } = useParams(); // Extract both category and id
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
-    console.log("Category from URL:", category);
-    console.log("Product ID from URL:", id);
-
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8082/api/products/details/${id}`);
+        const response = await axios.get(
+          `http://localhost:8082/api/products/details/${id}`
+        );
         setProduct(response.data);
+        setSelectedImage(response.data.image); // Set the first image as default
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
@@ -26,100 +30,187 @@ const DetailPage = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-xl text-gray-500">Loading product details...</p>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-xl text-gray-700">Loading product details...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Header Section */}
-      <div className="relative bg-gray-900 text-white">
-        <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(data:image/png;base64,${product.image})` }}></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 text-center">
-          <h1 className="text-5xl font-extrabold tracking-wide">{product.name}</h1>
-          <p className="mt-4 text-lg md:text-xl text-gray-300">{product.description}</p>
-          <p className="mt-6 text-4xl font-bold">Rs {product.price}</p>
-        </div>
-      </div>
+    <Box
+      minHeight="100vh"
+      bgcolor="white"
+      fontFamily="Poppins, sans-serif"
+      py={4}
+    >
+      <Box
+        maxWidth="lg"
+        mx="auto"
+        display="grid"
+        gridTemplateColumns={{ xs: "1fr", lg: "2fr 3fr" }}
+        gap={4}
+        px={2}
+      >
+        {/* Left Section: Images */}
+        <Box display="flex" flexDirection="row" gap={2}>
+          {/* Thumbnails */}
+          <Box display="flex" flexDirection="column" gap={1}>
+            {[product.image, ...(product.additionalImages || [])].map(
+              (img, index) => (
+                <img
+                  key={index}
+                  src={`data:image/png;base64,${img}`}
+                  alt={`Product Thumbnail ${index + 1}`}
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    objectFit: "cover",
+                    border:
+                      selectedImage === img
+                        ? "2px solid #000"
+                        : "1px solid #ccc",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setSelectedImage(img)}
+                />
+              )
+            )}
+          </Box>
 
-      {/* Product Details Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* Product Image */}
-        <div className="bg-white rounded-lg overflow-hidden shadow-lg flex justify-center items-center">
-          <img
-            src={`data:image/png;base64,${product.image}`}
-            alt={product.name}
-            className="object-contain h-full w-full"
-          />
-        </div>
+          {/* Main Image */}
+          <Box
+            flex="1"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            border="1px solid #ccc"
+            borderRadius="8px"
+            p={2}
+            boxShadow={2}
+          >
+            <img
+              src={`data:image/png;base64,${selectedImage}`}
+              alt={product.name}
+              style={{
+                width: "100%",
+                maxHeight: "500px",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+        </Box>
 
-        {/* Product Information */}
-        <div className="flex flex-col justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">{product.name}</h2>
-            <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
-            <p className="mt-4 text-2xl font-bold text-gray-800">Rs {product.price}</p>
+        {/* Right Section: Product Details */}
+        <Box display="flex" flexDirection="column" gap={3}>
+          {/* Product Title and Rating */}
+          <Box>
+            <Typography variant="h4" fontWeight="bold" color="textPrimary">
+              {product.name}
+            </Typography>
+            <Box display="flex" alignItems="center" gap={1} mt={1}>
+              <Typography variant="body1" color="secondary">
+                ★★★★★
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {product.reviews || 0} reviews
+              </Typography>
+            </Box>
+          </Box>
 
-            {/* Additional Information */}
-            <div className="mt-6 space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800">Key Ingredients</h3>
-                <p className="mt-2 text-gray-600">{product.ingredients || "Details not available."}</p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-800">Customer Reviews</h3>
-                <div className="flex items-center mt-2">
-                  <div className="text-yellow-500 text-lg">★★★★★</div>
-                  <p className="ml-2 text-gray-600">4.5/5 (200 reviews)</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Product Description */}
+          <Typography variant="body1" color="textSecondary">
+            {product.description}
+          </Typography>
 
-          <div className="mt-6 flex items-center space-x-4">
+          <Divider />
+
+          {/* Price */}
+          <Box>
+            {product.discount ? (
+              <Box display="flex" alignItems="baseline" gap={2}>
+                <Typography variant="h5" color="error" fontWeight="bold">
+                  Rs {product.price - (product.price * product.discount) / 100}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="textSecondary"
+                  sx={{ textDecoration: "line-through" }}
+                >
+                  Rs {product.price}
+                </Typography>
+              </Box>
+            ) : (
+              <Typography variant="h5" color="textPrimary" fontWeight="bold">
+                Rs {product.price}
+              </Typography>
+            )}
+          </Box>
+
+          {/* Quantity Selector and Buttons */}
+          <div className="flex items-center space-x-4 mb-6">
             {/* Quantity Selector */}
             <div className="flex items-center border border-gray-300 rounded-md">
-              <button className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200">-</button>
+              <button className="px-4 py-2 bg-white text-gray-600 hover:bg-gray-100">
+                -
+              </button>
               <input
                 type="text"
-                className="w-12 text-center border-0 focus:ring-0 focus:outline-none"
+                className="w-12 text-center border-0 bg-white text-gray-900 focus:ring-0 focus:outline-none"
                 value="1"
                 readOnly
               />
-              <button className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200">+</button>
+              <button className="px-4 py-2 bg-white text-gray-600 hover:bg-gray-100">
+                +
+              </button>
             </div>
 
-            {/* Action Buttons */}
-            <button className="px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition">
+            {/* Add to Cart Button */}
+            <button className="flex items-center px-8 py-3 border border-black text-black bg-white rounded-md hover:bg-black hover:text-white transition">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.2 6m14.4-6H7m-1 6h12m-6-6V4m0 0H9m3 0h3"
+                />
+              </svg>
               Add to Cart
             </button>
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition">
+            <button className="flex items-center px-8 py-3 text-white bg-black rounded-md hover:bg-white hover:text-black border border-black transition">
+              {<ShoppingBagIcon />}
               Shop Now
             </button>
           </div>
-        </div>
-      </div>
 
-      {/* Related Products Section */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6">Related Products</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Placeholder for dynamic products */}
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
-              <div className="h-32 w-32 bg-gray-200 rounded-md mb-4"></div>
-              <h4 className="text-lg font-medium text-gray-800">Product {item}</h4>
-              <p className="text-gray-600 mt-2">Rs 500</p>
-              <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-500">
-                View
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+          <Divider />
+
+          {/* Additional Details */}
+          <Box>
+            <Typography variant="body2" color="textSecondary">
+              Free shipping on orders over Rs 2500.
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              365-day returns.{" "}
+              <Box
+                component="a"
+                href="#"
+                sx={{ textDecoration: "underline", color: "inherit" }}
+              >
+                Return Policy
+              </Box>
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+      <RelatedProduct/>
+    </Box>
   );
 };
 
