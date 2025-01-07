@@ -23,9 +23,9 @@ const SkincareSection = () => {
           skincare solutions. Science-backed and enriched with the goodness of
           nature, for a radiant you.
         </p>
-        <button className="px-6 py-3 bg-blue-600 text-white font-semibold text-lg rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300">
+        <button className="bg-black text-white font-semibold py-3 px-12 rounded-md hover:bg-gray-800 transition duration-300">
           Learn More
-        </button>
+          </button>
       </div>
     </section>
   );

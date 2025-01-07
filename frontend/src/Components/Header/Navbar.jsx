@@ -1,43 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import blackLogo from '../../../public/logo.png'; 
-import whiteLogo from '../../../public/logo1.png'; 
+import React from 'react';
+import { FaSearch, FaShoppingCart } from 'react-icons/fa';
+import logo from '../../../public/logo.png'; // Ensure the path to your logo is correct
 
-const Header = () => {
-  const [isDarkBackground, setIsDarkBackground] = useState(true); 
-  
-  useEffect(() => {
-    
-    setIsDarkBackground(true); 
-  }, []);
-
+const Navbar = () => {
   return (
-    <header className="bg-black text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        
-        <nav>
-          <ul className="flex flex-col space-y-2">
-            <li><a href="#" className="hover:underline">Shop</a></li>
-            <li><a href="#" className="hover:underline">About</a></li>
-            <li><a href="#" className="hover:underline">Futures</a></li>
-          </ul>
+    <header className="bg-white shadow-sm">
+      <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center py-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <img src={logo} alt="Logo" className="h-12" />
+        </div>
+        {/* Navbar */}
+        <nav className="flex items-center space-x-6">
+          <a href="#" className="text-gray-600 hover:text-black font-medium">
+            Home
+          </a>
+          <a href="#" className="text-gray-600 hover:text-black font-medium">
+            Shop
+          </a>
+          <a href="#" className="text-gray-600 hover:text-black font-medium">
+            About
+          </a>
+          <a href="#" className="text-gray-600 hover:text-black font-medium">
+            Contact
+          </a>
         </nav>
-
-        
-        <img
-          src={isDarkBackground ? whiteLogo : blackLogo}
-          alt="LUMIN.CO"
-          className="h-8"
-        />
-
-        
-        <div className="flex space-x-4">
-          <button className="hover:underline">Search</button>
-          <button className="hover:underline">Account</button>
-          <button className="hover:underline">Cart (2)</button>
+        {/* Icons */}
+        <div className="flex items-center space-x-4">
+          <FaSearch className="text-gray-600 hover:text-black text-lg cursor-pointer" />
+          <FaShoppingCart className="text-gray-600 hover:text-black text-lg cursor-pointer" />
         </div>
       </div>
     </header>
   );
 };
 
-export default Header;
+export default Navbar;
