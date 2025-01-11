@@ -10,7 +10,6 @@ export const Home = () => {
   return (
     <>
       <Newsbar />
-
       <Header />
       <Card/>
       <SkincareSection/>

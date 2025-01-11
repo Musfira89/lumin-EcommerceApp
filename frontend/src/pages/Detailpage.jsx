@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Button, Typography, Box, Divider, IconButton } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { CartContext } from "../Context/CartContext";
+
+import { Typography, Box, Divider, IconButton } from "@mui/material";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import RelatedProduct from "./Relatedproduct";
+
 const DetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -166,23 +170,16 @@ const DetailPage = () => {
             </div>
 
             {/* Add to Cart Button */}
-            <button className="flex items-center px-8 py-3 border border-black text-black bg-white rounded-md hover:bg-black hover:text-white transition">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.2 6m14.4-6H7m-1 6h12m-6-6V4m0 0H9m3 0h3"
-                />
-              </svg>
+            <button
+              className="flex items-center px-8 py-3 border border-black text-black bg-white rounded-md hover:bg-black hover:text-white transition"
+              onClick={() => {
+                console.log("Adding to cart:", product);
+                addToCart(product);
+              }}
+            >
               Add to Cart
             </button>
+
             <button className="flex items-center px-8 py-3 text-white bg-black rounded-md hover:bg-white hover:text-black border border-black transition">
               {<ShoppingBagIcon />}
               Shop Now
@@ -209,7 +206,7 @@ const DetailPage = () => {
           </Box>
         </Box>
       </Box>
-      <RelatedProduct/>
+      <RelatedProduct />
     </Box>
   );
 };
